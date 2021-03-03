@@ -2,9 +2,9 @@
 
 namespace Hcode\Model;
 
-use Exception;
 use \Hcode\DB\Sql;
 use \Hcode\Model;
+use \Hcode\Mailer;
 
 class User extends Model {
 
@@ -162,7 +162,7 @@ class User extends Model {
             );
 
             $mailer->send();
-            return $data    ;
+            return $data;
 
             }
         }
@@ -170,10 +170,7 @@ class User extends Model {
 
     public static function validForgotDecrypt($code) {
 
-        base64_decode($code);
-
-        $idrecovery = openssl_decrypt
-                ($dataRecovery["idrecovery"], OPENSSL_CIPHER_RC2_128, User::SECRET, OPENSSL_KEYTYPE_EC);
+        $idrecovery = openssl_decrypt(base64_decode($code), OPENSSL_CIPHER_RC2_128, User::SECRET, OPENSSL_KEYTYPE_EC);
         $sql = new Sql();
         $results = $sql->select("SELECT * FROM tb_userspasswordsrecoveries a
         INNER JOIN tb_users b USING(iduser)

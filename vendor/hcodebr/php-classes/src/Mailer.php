@@ -2,7 +2,7 @@
 
 namespace Hcode;
 
-use Rain\Tplpl;
+use Rain\Tpl;
 
 class Mailer {
 
