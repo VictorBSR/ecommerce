@@ -1,22 +1,4 @@
-<?php if(!class_exists('Rain\Tpl')){exit;}?><div class="site-branding-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="logo">
-                    <h1><a href="#"><img src="/res/site/img/logo.png"></a></h1>
-                </div>
-            </div>
-            
-            <div class="col-sm-6">
-                <div class="shopping-item">
-                    <a href="carrinho.html">Carrinho - <span class="cart-amunt">R$100</span> <i class="fa fa-shopping-cart"></i> <span class="product-count">5</span></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> <!-- End site branding area -->
-
-<div class="mainmenu-area">
+<?php if(!class_exists('Rain\Tpl')){exit;}?><div class="mainmenu-area">
     <div class="container">
         <div class="row">
             <div class="navbar-header">

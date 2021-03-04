@@ -6,6 +6,7 @@ class Model {
 
     private $values = [];
 
+    //rotina para tratar comandos "get" e "set" na própria classe
     public function __call($name, $arguments)
     {
         $method = substr($name, 0, 3);
