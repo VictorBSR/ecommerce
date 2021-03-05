@@ -17,15 +17,20 @@ require_once("admin-products.php"); */
 
 use \Hcode\Page;
 use \Hcode\Model\Category;
-use \Hcode\PageAdmin;
+use \Hcode\PageAdmin;   
 use \Hcode\Model\User;
 use \Hcode\Model\Product;
 
 /////////ROTAS DO SITE////////////////////////////////////////////////////////////////
 $app->get('/', function() {
+
+    //carregar produtos na home
+    $products = Product::listAll();
     
 	$page = new Hcode\Page();
-	$page->setTpl("index");
+	$page->setTpl("index", [
+        "products" => Product::checkList($products)
+    ]);
 
 });
 
@@ -255,6 +260,18 @@ $app->get("/admin/products/:idproduct", function($idproduct) {
     ]);
 });
 
+$app->get("/admin/products/:idproduct/delete", function ($idproduct) {
+
+    User::verifyLogin();
+
+    $product = new Product();
+    $product->get((int)$idproduct);
+    $product->delete();
+
+    header("Location: /admin/products");
+    exit;
+});
+
 $app->post("/admin/products/:idproduct", function($idproduct) {
 
     User::verifyLogin();
@@ -263,6 +280,7 @@ $app->post("/admin/products/:idproduct", function($idproduct) {
     $product->get((int)$idproduct);
     $product->setData($_POST);
     $product->save();
+
     $product->setPhoto($_FILES["file"]);
 
     header("Location: /admin/products");
@@ -342,6 +360,13 @@ $app->post("/admin/categories/:idcategory", function($idcategory) {
 	header("Location: /admin/categories");
 	exit;
 });
+
+/////////FUNCTIONS.PHP////////////////////////////////////////////////////////////////
+
+function formatPrice(float $vlprice) {
+
+    return number_format($vlprice, 2, ",", ".");
+}
 
 $app->run();
 

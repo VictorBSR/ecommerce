@@ -12,6 +12,19 @@ class Product extends Model {
         return $sql->select("SELECT * FROM tb_products ORDER BY desproduct");
     }
 
+    //metodo para corrigir desphoto não sendo encontrado
+    public static function checkList($list) {
+        foreach ($list as &$row) {
+            
+            $p = new Product();
+            $p->setData($row);
+            $row = $p->getValues();
+     
+        }
+     
+        return $list;
+    }
+
     public function save() {
 
         $sql = new Sql();
@@ -87,14 +100,20 @@ class Product extends Model {
             case "png":
                 $image = imagecreatefrompng($file["tmp_name"]);
                 break;
+            default:    //caso não se atualize a imagem, não dá erro no imagejpeg
+                goto a;
         }
 
         $dist = $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR."res".DIRECTORY_SEPARATOR."site".DIRECTORY_SEPARATOR."img".DIRECTORY_SEPARATOR."products".DIRECTORY_SEPARATOR.$this->getidproduct().".jpg";
 
         imagejpeg($image,$dist);
         imagedestroy($image);
+        goto a;
 
+        a:
         $this->checkPhoto();
+
+        
     }
 
     

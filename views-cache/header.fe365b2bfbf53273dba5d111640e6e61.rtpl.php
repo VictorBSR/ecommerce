@@ -71,6 +71,10 @@ desired effect
       <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
         <span class="sr-only">Toggle navigation</span>
       </a>
+      <!-- Back to store -->
+      <a href="/" class="sidebar-toggle" role="button">
+        <i class="fa fa-home">Home page</i>
+      </a>
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
@@ -258,7 +262,7 @@ desired effect
         <!-- Optionally, you can add icons to the links -->
         <li><a href="/admin/users"><i class="fa fa-users"></i> <span>Usuários</span></a></li>
         <li><a href="/admin/categories"><i class="fa fa-object-group"></i> <span>Categorias</span></a></li>
-        <li><a href="/admin/products"><i class="fa fa-gamepad"></i> <span>Produtos</span></a></li>
+        <li><a href="/admin/products"><i class="fa fa-television"></i> <span>Produtos</span></a></li>
         <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Multilevel</span>
             <span class="pull-right-container">
