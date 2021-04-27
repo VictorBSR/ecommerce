@@ -8,7 +8,7 @@ $app = new \Slim\Slim();
 
 $app->config('debug', true);
 
-//separar rotas não funciona, provav erro ou bloqueio no Apache
+//separar rotas em arqs diferentes não funciona, provav erro ou bloqueio no Apache
 /* require_once("site.php");
 require_once("admin.php");
 require_once("admin-categories.php");
