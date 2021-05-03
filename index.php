@@ -21,6 +21,7 @@ use \Hcode\PageAdmin;
 use \Hcode\Model\User;
 use \Hcode\Model\Product;
 use \Hcode\Model\Cart;
+use \Hcode\Model\Address;
 
 /////////ROTAS DO SITE////////////////////////////////////////////////////////////////
 $app->get('/', function() {
@@ -122,6 +123,53 @@ $app->post("/cart/freight", function() {
 	$cart->setFreight($_POST['zipcode']);
 
 	header("Location: /cart");
+	exit;
+});
+
+$app->get("/checkout", function() {
+
+	User::verifyLogin(false);
+	$cart = Cart::getFromSession();
+	$address = new Address();
+
+	$page = new Page();
+	$page->setTpl("checkout", [
+		'cart'=>$cart->getValues(),
+		'address'=>$address->getValues()
+
+	]);
+});
+
+$app->get("/login", function() {
+
+	$page = new Page();
+	$page->setTpl("login", [
+		'error'=>User::getError()
+	]);
+});
+
+$app->post("/login", function() {
+
+	try {
+
+		User::login($_POST['login'], $_POST['password']);
+
+	} catch (Exception $ex) {
+		
+		User::setError($ex->getMessage());
+		User::getError();
+		User::clearError();
+	}
+
+	header("Location: /checkout");
+	exit;
+});
+
+$app->get("/logout", function() {
+
+	User::logout();
+
+	header("Location: /login");
 	exit;
 });
 
@@ -496,6 +544,17 @@ $app->get("/admin/categories/:idcategory/products/:idproduct/remove", function($
 function formatPrice(float $vlprice) {
 
     return number_format($vlprice, 2, ",", ".");
+}
+
+function checkLogin($inadmin = true) {
+
+	return User::checkLogin($inadmin);
+}
+
+function getUserName() {
+
+	$user = user::getFromSession();
+	return $user->getdesperson();
 }
 
 $app->run();
