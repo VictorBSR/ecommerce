@@ -245,12 +245,61 @@ class User extends Model {
         ));
     }
 
+    public static function setError($msg) {
+
+        $_SESSION[User::ERROR] = $msg;
+    }
+
+    public static function getError() {
+
+        $msg = (isset($_SESSION[User::ERROR]) && $_SESSION[User::ERROR]) ? $_SESSION[User::ERROR] : '';
+        User::clearError();
+
+        return $msg;
+    }
+
+    public static function clearError() {
+
+        $_SESSION[User::ERROR] = NULL;
+    }
+
+    public static function setErrorRegister($msg) {
+
+        $_SESSION[User::ERROR_REGISTER] = $msg;
+    }
+
+    
+    public static function getErrorRegister() {
+
+        $msg = (isset($_SESSION[User::ERROR_REGISTER]) && $_SESSION[User::ERROR_REGISTER]) ? $_SESSION[User::ERROR_REGISTER] : '';
+        User::clearErrorRegister();
+
+        return $msg;
+    }
+
+    public static function clearErrorRegister() {
+
+        $_SESSION[User::ERROR_REGISTER] = NULL;
+    }
+
+    public static function checkLoginExists($login) {
+
+        $sql = new Sql();
+        $results = $sql->select("SELECT * FROM tb_users WHERE deslogin = :deslogin", [
+            ':deslogin'=>$login
+        ]);
+
+        return (count($results) > 0);
+    }
+
     public static function getPasswordHash($password) {
 
         return password_hash($password, PASSWORD_DEFAULT, [
             'cost'=>12
         ]);
     }
+
+
 }
 
  
