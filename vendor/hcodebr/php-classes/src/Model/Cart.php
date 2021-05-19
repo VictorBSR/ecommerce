@@ -143,7 +143,7 @@ class Cart extends Model {
 
         $sql = new Sql();
         $results = $sql->select("
-            SELECT SUM(vlprice) AS vlprice, SUM(vlwidth) AS vlwidth, SUM(vlheight) AS vlheigth, SUM(vllength) AS vllength, SUM)
+            SELECT SUM(vlprice) AS vlprice, SUM(vlwidth) AS vlwidth, SUM(vlheight) AS vlheigth, SUM(vllength) AS vllength, SUM(
                 vlweigth) AS vlweigth, COUNT(*) AS nrqtd
             FROM tb_products a
             INNER JOIN tb_cartsproducts b ON a.idproduct = b.idproduct
@@ -185,7 +185,7 @@ class Cart extends Model {
                 'sCdAvisoRecebimento'=>'S'
             ]);
 
-            $xml = simplexml_load_file("http://ws.correios.com.br/calculador/CalcProcePrazo?");
+            $xml = simplexml_load_file("http://ws.correios.com.br/calculador/CalcProcePrazo?".$qs);
             $result = $xml->Servicos->cServico;
 
             if($result->MsgErro != '') {
@@ -250,7 +250,7 @@ class Cart extends Model {
         
         $totals = $this->getProductsTotal();
         $this->setvlsubtotal($totals['vlprice']);
-        $this->setvltotal($totals['vlprice'] + $this->getvlfreight);
+        $this->setvltotal($totals['vlprice'] + $this->getvlfreight());
     }
 
 }
