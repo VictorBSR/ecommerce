@@ -592,7 +592,9 @@ $app->get("/admin/categories/:idcategory/products/:idproduct/remove", function($
 
 function formatPrice(float $vlprice) {
 
-    return number_format($vlprice, 2, ",", ".");
+	$price = number_format($vlprice, 2, ",", ".");
+	if (is_null($price)) $price = 0;
+    return $price;
 }
 
 function checkLogin($inadmin = true) {
