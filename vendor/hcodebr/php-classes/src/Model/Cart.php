@@ -17,7 +17,7 @@ class Cart extends Model {
 
         $cart = new Cart();
 
-        if(isset($_SESSION[Cart::SESSION]) && $_SESSION[Cart::SESSION]['idcart'] > 0) {
+        if(isset($_SESSION[Cart::SESSION]) && (int)$_SESSION[Cart::SESSION]['idcart'] > 0) {
             $cart->get((int)$_SESSION[Cart::SESSION]['idcart']);
         } else {
             $cart->getFromSessionID();
@@ -126,7 +126,7 @@ class Cart extends Model {
         $sql = new Sql();
 
         $rows = $sql->select("
-            SELECT b.idproduct, b.desproduct, b.vlprice, b.vlwidth, b.vlheight, b.vllength, b.vlweight, b.desurl, COUNT(*) AS nrqtd, SUM(b.vlprice) AS vltotal
+            SELECT b.idproduct, b.desproduct, b.vlprice, b.vlwidth, b.vlheight, b.vllength, b.vlweight, b.desurl COUNT(*) AS nrqtd, SUM(b.vlprice) AS vltotal
             FROM tb_cartsproducts a 
             INNER JOIN tb_products b ON a.idproduct = b.idproduct 
             WHERE a.idcart = :idcart AND a.dtremoved IS NULL 

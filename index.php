@@ -8,6 +8,8 @@ $app = new \Slim\Slim();
 
 $app->config('debug', true);
 
+//Config MySQL: LOCALVICTOR, 127.0.0.1, 3306, root, 
+
 //separar rotas em arqs diferentes não funciona, provav erro ou bloqueio no Apache
 /* require_once("site.php");
 require_once("admin.php");
@@ -222,6 +224,47 @@ $app->post("/register", function () {
 	exit;
 });
 
+$app->get("/forgot", function() {
+	
+	$page = new Hcode\Page();
+	$page->setTpl("forgot");
+});
+
+$app->post("/forgot", function() {
+	
+	$user = User::getForgot($_POST["email"], false);
+
+	header("Location: /forgot/sent");
+	exit;
+});
+
+$app->get("/forgot/sent", function() {
+
+	$page = new Hcode\Page();
+	$page->setTpl("forgot-sent");
+});
+
+$app->get("/forgot/reset", function() {
+	
+	$user = User::validForgotDecrypt($_GET["code"]);
+
+	$page = new Hcode\Page();
+	$page->setTpl("forgot-reset", array(
+		"name"=>$user["desperson"],
+		"code"=>$_GET["code"]
+	));
+});
+
+$app->post("/forgot/reset", function() {
+	$forgot = User::validForgotDecrypt(($_POST["code"]));
+	User::setForgotUsed($forgot["idrecovery"]);
+	$user = new User();
+	$user->get((int)$forgot["iduser"]);
+	
+	//criptografar nova senha
+	$password = password_hash($_POST["password"], PASSWORD_DEFAULT, [
+		"cost"=>12
+	]);
 
 /////////ROTAS ADMIN////////////////////////////////////////////////////////////////
 
@@ -246,7 +289,7 @@ $app->get('/admin/login', function() {
 
 $app->post('/admin/login', function() {
     
-	//User::login($_POST["login"],$_POST["password"]);
+	User::login($_POST["login"],$_POST["password"]);
 	$usr = new Hcode\Model\User();
 	$usr->login($_POST["login"],$_POST["password"]);
 	header("Location: /admin");
@@ -590,11 +633,10 @@ $app->get("/admin/categories/:idcategory/products/:idproduct/remove", function($
 
 /////////FUNCTIONS.PHP////////////////////////////////////////////////////////////////
 
-function formatPrice(float $vlprice) {
+function formatPrice($vlprice) {
 
-	$price = number_format($vlprice, 2, ",", ".");
-	if (is_null($price)) $price = 0;
-    return $price;
+	if (!$vlprice > 0) $vlprice = 0;
+    return number_format($vlprice, 2, ",", ".");;
 }
 
 function checkLogin($inadmin = true) {
