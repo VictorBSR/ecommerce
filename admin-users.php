@@ -10,9 +10,9 @@ $app->get("/admin/users", function() {
 	$search = (isset($_GET['search'])) ? $_GET['search'] : "";
 	$page = (isset($_GET['page'])) ? (int)$_GET['page'] : 1;
 
-	if($search != '') [
+	if($search != '') {
 		$pagination = User::getPageSearch($search, $page);
-	] else {
+	} else {
 		$pagination = User::getPage($page);
 	}
 	
@@ -33,7 +33,7 @@ $app->get("/admin/users", function() {
 	$page->setTpl("users", array(
 		"users"=>$pagination['data'],
 		"search"=>$search,
-		"pages"=>[]
+		"pages"=>$pages
 	));
 });
 
